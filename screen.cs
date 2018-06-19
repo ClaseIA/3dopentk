@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Drawing;
-
+using System.Collections.Generic;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace ConsoleApplication1
 {
     class screen:GameWindow
     {
+        double[,] vertex;   
+        double[,] faces;
 
         Punto[] punto = new Punto[10000];
         Punto foco= new Punto();
@@ -27,6 +31,7 @@ namespace ConsoleApplication1
         }
           protected override void OnLoad(EventArgs e)
           {
+            cargar();
               base.OnLoad(e);
               radio = 0.2f;
               GL.LoadIdentity();
@@ -36,7 +41,7 @@ namespace ConsoleApplication1
             GL.Enable(EnableCap.DepthTest);
               
               foco.valores(0.5, 0.5, 0);
-              vertices[0] = new Punto(); vertices[0].valores(-1f, -1f, 1f);
+              vertices[0] = new Punto(); vertices[0].valores(-1, -1f, 1f);
               vertices[1] = new Punto(); vertices[1].valores(-1f, 1f, 1f);
               vertices[2] = new Punto(); vertices[2].valores(-1f, -1f, -1f);
               vertices[3] = new Punto(); vertices[3].valores(-1f, 1f, -1F);
@@ -44,6 +49,8 @@ namespace ConsoleApplication1
             vertices[5] = new Punto(); vertices[5].valores(1f, 1f, 1f);
             vertices[6] = new Punto(); vertices[6].valores(1f, -1f, -1f);
             vertices[7] = new Punto(); vertices[7].valores(1f, 1f, -1F);
+            Console.WriteLine(faces[0, 1]);
+
 
         }
 
@@ -121,6 +128,74 @@ namespace ConsoleApplication1
               posx = 0.001 * e.Mouse.X;
               posy = 0.001 * e.Mouse.Y;
             foco.valores(posx, posy, 0);
+        }
+
+        void cargar()
+        {
+            string archivo = File.ReadAllText("cubo.obj");
+            Char delimitador = ' ';
+            int caras = 0;
+            int verticies = 0;
+            int normales = 0;
+            string[] subcadenenas = Regex.Split(archivo, "\n");
+            vertex = new double[subcadenenas.Length, 3];
+           faces = new double[subcadenenas.Length, 3];
+            // int v=0;
+            string[] vertexString = new string[0];
+            for (int i = 0; i < subcadenenas.Length; i++)
+            {
+                string[] subcadenitas = Regex.Split(subcadenenas[i], " ");
+
+                for (int j = 0; j < subcadenenas[i].Length; j++)
+                {
+                    if (subcadenenas[i][j] == 'v')
+                    {
+                        if (subcadenenas[i][j + 1] == 'n')
+                        {
+                            normales++;
+                            break;
+                        }
+
+
+                        for (int k = 1; k <= 3; k++)
+                        {
+                            vertex[verticies, k - 1] = Convert.ToDouble(subcadenitas[k]);    
+                        }
+                        verticies++;
+                        break;
+                    }
+                    else
+                        break;
+                }
+
+                //leer las caras
+                for (int j = 0; j < subcadenenas[i].Length; j++)
+                {
+                   string[] subcaritas = Regex.Split(subcadenenas[i], " ");
+                    if (subcadenenas[i][j] == 'f')
+                    {
+                        
+                        for (int k = 1; k <= 3; k++)
+                        {
+                            Console.WriteLine(Char.GetNumericValue(subcadenitas[k][0]));
+                             faces[caras, k - 1] = Char.GetNumericValue(subcadenitas[k][0]);
+
+                        }
+                        caras++;
+
+                        break;
+                    }
+                    else
+                        break;
+                }
+
+
+            }
+         
+            Console.WriteLine("el numero de vertices son: " + verticies);
+            Console.WriteLine("el numero decaras son: " + caras);
+            Console.WriteLine("el numero normales son: " + normales);
+
         }
 
 

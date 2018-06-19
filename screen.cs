@@ -12,11 +12,12 @@ namespace ConsoleApplication1
     class screen:GameWindow
     {
         double[,] vertex;   
-        double[,] faces;
+        int[,] faces;
 
         Punto[] punto = new Punto[10000];
         Punto foco= new Punto();
-        Punto []vertices=new Punto[8];
+        Punto []vertices;
+        int[] caritas;
         Random aleatorio= new Random();
         double intensidad;
         double radio;
@@ -41,15 +42,12 @@ namespace ConsoleApplication1
             GL.Enable(EnableCap.DepthTest);
               
               foco.valores(0.5, 0.5, 0);
-              vertices[0] = new Punto(); vertices[0].valores(-1, -1f, 1f);
-              vertices[1] = new Punto(); vertices[1].valores(-1f, 1f, 1f);
-              vertices[2] = new Punto(); vertices[2].valores(-1f, -1f, -1f);
-              vertices[3] = new Punto(); vertices[3].valores(-1f, 1f, -1F);
-            vertices[4] = new Punto(); vertices[4].valores(1f, -1f, 1f);
-            vertices[5] = new Punto(); vertices[5].valores(1f, 1f, 1f);
-            vertices[6] = new Punto(); vertices[6].valores(1f, -1f, -1f);
-            vertices[7] = new Punto(); vertices[7].valores(1f, 1f, -1F);
-            Console.WriteLine(faces[0, 1]);
+            for(int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] = new Punto(); vertices[i].valores(vertex[i,0], vertex[i, 1], vertex[i, 2]);
+            }
+
+            //Console.WriteLine(faces[0, 1]);
 
 
         }
@@ -67,40 +65,26 @@ namespace ConsoleApplication1
             GL.LoadIdentity();
             GL.Scale(0.5, 0.5, 0.5);
             GL.Rotate(angulo, 0, 1, 0);
-             
 
-             GL.Begin(PrimitiveType.LineLoop);
-            GL.Vertex3(vertices[0].x, vertices[0].y, vertices[0].z);
-            GL.Vertex3(vertices[1].x, vertices[1].y, vertices[1].z);
-            GL.Vertex3(vertices[3].x, vertices[3].y, vertices[3].z);
-            GL.Vertex3(vertices[2].x, vertices[2].y, vertices[2].z);
 
-            GL.Vertex3(vertices[2].x, vertices[2].y, vertices[2].z);
-            GL.Vertex3(vertices[3].x, vertices[3].y, vertices[3].z);
-            GL.Vertex3(vertices[7].x, vertices[7].y, vertices[7].z);
-            GL.Vertex3(vertices[6].x, vertices[6].y, vertices[6].z);
 
-            GL.Vertex3(vertices[6].x, vertices[6].y, vertices[6].z);
-            GL.Vertex3(vertices[7].x, vertices[7].y, vertices[7].z);
-            GL.Vertex3(vertices[5].x, vertices[5].y, vertices[5].z);
-            GL.Vertex3(vertices[4].x, vertices[4].y, vertices[4].z);
+            // Console.WriteLine("ddddd: " + caritas.Length);
+           
+            for (int i = 0; i <caritas.Length-1; i++)
+            {
+                GL.Begin(PrimitiveType.LineLoop);
+                for (int j = 0; j < 4; j++)
+                {
+                   
+                    GL.Vertex3(vertices[faces[i, j]-1].x, vertices[faces[i, j]-1].y, vertices[faces[i, j]-1].z);
+                    
+                }
+                GL.End();
+            }
 
-            GL.Vertex3(vertices[4].x, vertices[4].y, vertices[4].z);
-            GL.Vertex3(vertices[5].x, vertices[5].y, vertices[5].z);
-            GL.Vertex3(vertices[1].x, vertices[1].y, vertices[1].z);
-            GL.Vertex3(vertices[0].x, vertices[0].y, vertices[0].z);
+            
 
-            GL.Vertex3(vertices[2].x, vertices[2].y, vertices[2].z);
-            GL.Vertex3(vertices[6].x, vertices[6].y, vertices[6].z);
-            GL.Vertex3(vertices[4].x, vertices[4].y, vertices[4].z);
-            GL.Vertex3(vertices[0].x, vertices[0].y, vertices[0].z);
-
-            GL.Vertex3(vertices[7].x, vertices[7].y, vertices[7].z);
-            GL.Vertex3(vertices[3].x, vertices[3].y, vertices[3].z);
-            GL.Vertex3(vertices[1].x, vertices[1].y, vertices[1].z);
-            GL.Vertex3(vertices[5].x, vertices[5].y, vertices[5].z);
-            GL.End();
-            if(angulo> 360)
+            if (angulo> 360)
             {
                 angulo = 0;
             }
@@ -132,14 +116,14 @@ namespace ConsoleApplication1
 
         void cargar()
         {
-            string archivo = File.ReadAllText("cubo.obj");
+            string archivo = File.ReadAllText("mono.obj");
             Char delimitador = ' ';
             int caras = 0;
             int verticies = 0;
             int normales = 0;
             string[] subcadenenas = Regex.Split(archivo, "\n");
             vertex = new double[subcadenenas.Length, 3];
-           faces = new double[subcadenenas.Length, 3];
+            faces = new int[subcadenenas.Length, 100];
             // int v=0;
             string[] vertexString = new string[0];
             for (int i = 0; i < subcadenenas.Length; i++)
@@ -169,16 +153,21 @@ namespace ConsoleApplication1
                 }
 
                 //leer las caras
+               // string[] subcaritas = Regex.Split(subcadenenas[i], " ");
                 for (int j = 0; j < subcadenenas[i].Length; j++)
                 {
-                   string[] subcaritas = Regex.Split(subcadenenas[i], " ");
+                  
                     if (subcadenenas[i][j] == 'f')
                     {
-                        
-                        for (int k = 1; k <= 3; k++)
-                        {
-                            Console.WriteLine(Char.GetNumericValue(subcadenitas[k][0]));
-                             faces[caras, k - 1] = Char.GetNumericValue(subcadenitas[k][0]);
+                        string[] subsubcadenitas = Regex.Split(subcadenenas[i], "//|\\ ");
+                        int x = 1;
+                        for (int k = 1; k <= 4; k++)
+                        {//1,3,5,7
+                            
+                           // Console.WriteLine(Int32.Parse(subsubcadenitas[x]));
+                            //if(subcadenitas[k][1]==)
+                             faces[caras, k - 1] = Int32.Parse(subsubcadenitas[x]);
+                            x += 2;
 
                         }
                         caras++;
@@ -195,7 +184,8 @@ namespace ConsoleApplication1
             Console.WriteLine("el numero de vertices son: " + verticies);
             Console.WriteLine("el numero decaras son: " + caras);
             Console.WriteLine("el numero normales son: " + normales);
-
+            vertices = new Punto[verticies];
+            caritas = new int[caras];
         }
 
 

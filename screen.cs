@@ -25,6 +25,8 @@ namespace ConsoleApplication1
         double posy;
         double distancia;
         double angulo;
+        double fScale;
+        double fTrans;
 
         public screen(int ancho, int alto): base (ancho,alto)
         {
@@ -33,6 +35,8 @@ namespace ConsoleApplication1
           protected override void OnLoad(EventArgs e)
           {
             cargar();
+            fScale = 1;
+            fTrans = 0;
               base.OnLoad(e);
               radio = 0.2f;
               GL.LoadIdentity();
@@ -64,7 +68,7 @@ namespace ConsoleApplication1
             base.OnRenderFrame(e);
             GL.LoadIdentity();
             GL.Scale(0.5, 0.5, 0.5);
-            GL.Rotate(angulo, 0, 1, 0);
+            //GL.Rotate(angulo, 0, 1, 0);
 
 
 
@@ -72,25 +76,35 @@ namespace ConsoleApplication1
            
             for (int i = 0; i <caritas.Length-1; i++)
             {
-                GL.Begin(PrimitiveType.Quads);
+                GL.Begin(PrimitiveType.LineLoop);
+
                 for (int j = 0; j < 4; j++)
                 {
-                   
-                    GL.Vertex3(vertices[faces[i, j]-1].x, vertices[faces[i, j]-1].y, vertices[faces[i, j]-1].z);
-                    
+
+               
+                GL.Vertex3(((vertices[faces[i, j] - 1].x * Math.Cos(angulo)  + Math.Sin(angulo)* vertices[faces[i, j] - 1].z)*fScale)+fTrans,
+                vertices[faces[i, j] - 1].y*fScale,
+               ( vertices[faces[i, j] - 1].x * Math.Sinh(angulo)+  vertices[faces[i, j] - 1].z * Math.Cos(angulo))*fScale);
+
+
+
                 }
                 GL.End();
+
             }
 
-            
+           
 
-            if (angulo> 360)
+
+
+            if (angulo > 360)
             {
                 angulo = 0;
             }
-            angulo++;
+           
 
-             SwapBuffers();
+
+            SwapBuffers();
           }
 
           protected override void OnKeyPress(KeyPressEventArgs e)
@@ -98,13 +112,21 @@ namespace ConsoleApplication1
               base.OnKeyPress(e);
               if (e.KeyChar == 'a')
               {
-                  foco.x += 0.1;
-              }
-              if (e.KeyChar == 's')
+                fTrans -= 0.1;
+            }
+              if (e.KeyChar == 'd')
               {
-                  foco.x -= 0.1;
+                fTrans += 0.1;
               }
-          }
+            if (e.KeyChar == 'r')
+            {
+                angulo += 0.1;
+            }
+            if (e.KeyChar == 's')
+            {
+               fScale += 0.01;
+            }
+        }
 
           protected override void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e)
           {

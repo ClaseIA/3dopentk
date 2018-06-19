@@ -11,6 +11,8 @@ namespace ConsoleApplication1
 {
     class screen:GameWindow
     {
+        
+        
         double[,] vertex;   
         int[,] faces;
 

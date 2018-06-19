@@ -72,7 +72,7 @@ namespace ConsoleApplication1
            
             for (int i = 0; i <caritas.Length-1; i++)
             {
-                GL.Begin(PrimitiveType.LineLoop);
+                GL.Begin(PrimitiveType.Quads);
                 for (int j = 0; j < 4; j++)
                 {
                    
@@ -153,7 +153,7 @@ namespace ConsoleApplication1
                 }
 
                 //leer las caras
-               // string[] subcaritas = Regex.Split(subcadenenas[i], " ");
+              
                 for (int j = 0; j < subcadenenas[i].Length; j++)
                 {
                   
@@ -182,7 +182,7 @@ namespace ConsoleApplication1
             }
          
             Console.WriteLine("el numero de vertices son: " + verticies);
-            Console.WriteLine("el numero decaras son: " + caras);
+            Console.WriteLine("el numero de caras son: " + caras);
             Console.WriteLine("el numero normales son: " + normales);
             vertices = new Punto[verticies];
             caritas = new int[caras];

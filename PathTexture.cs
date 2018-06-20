@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using OpenTK.Graphics.OpenGL;
 
-namespace opengl_texture
+namespace ConsoleApplication1
 {
     class PathTexture
     {

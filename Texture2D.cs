@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace opengl_texture
+namespace ConsoleApplication1
 {
     public class Texture2D
     {

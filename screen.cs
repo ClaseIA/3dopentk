@@ -17,12 +17,16 @@ namespace ConsoleApplication1
 
         double[,] vertex;   
         int[,] faces;
+        int[,] facesText;
         double[,] VerText;
         
         Punto[] punto = new Punto[10000];
         Punto foco= new Punto();
         Punto []vertices;
+        Punto[] Texturas;
+
         int[] caritas;
+        int[] texturitas;
         Random aleatorio= new Random();
         double intensidad;
         double radio;
@@ -49,7 +53,7 @@ namespace ConsoleApplication1
               GL.MatrixMode(MatrixMode.Projection);
             GL.Ortho(0, 2, 0, 2, -1, 1);
             Texture = PathTexture.LoadTexture("panda.png");
-            Texture2 = PathTexture.LoadTexture("cubincolorin.png");
+            Texture2 = PathTexture.LoadTexture("mono.png");
             Matrix4 matriz = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1, 50.0f);
             GL.LoadMatrix(ref matriz);
             GL.Enable(EnableCap.DepthTest);
@@ -59,8 +63,13 @@ namespace ConsoleApplication1
             {
                 vertices[i] = new Punto(); vertices[i].valores(vertex[i,0], vertex[i, 1], vertex[i, 2]);
             }
+            for (int i = 0; i < Texturas.Length; i++)
+            {
+                Texturas[i] = new Punto(); Texturas[i].valores(VerText[i, 0], VerText[i, 1],0);
+            }
 
             //Console.WriteLine(faces[0, 1]);
+
 
 
         }
@@ -103,16 +112,19 @@ namespace ConsoleApplication1
             GL.Rotate(angulo, 0, 1, 0);
 
             // Console.WriteLine("ddddd: " + caritas.Length);
-            GL.BindTexture(TextureTarget.Texture2D, Texture2.ID);
-            for (int i = 0; i <caritas.Length-1; i++)
+           
+            for (int i = 0; i <caritas.Length; i++)
             {
-               
+                GL.BindTexture(TextureTarget.Texture2D, Texture2.ID);
                 GL.Begin(PrimitiveType.Quads);
                
                 for (int j = 0; j < 4; j++)
                 {
-                    GL.TexCoord3(vertices[faces[i, j] - 1].x, vertices[faces[i, j] - 1].y, vertices[faces[i, j] - 1].z);
-                   // GL.Vertex3(0, 1f, 1f);
+                   // if(j<2)
+                   GL.TexCoord2(Texturas[facesText[i, j]-1 ].x, Texturas[facesText[i, j]-1 ].y);
+                 // Console.WriteLine(Texturas[facesText[i, j] - 1].x );
+                  //  Console.WriteLine(Texturas[facesText[i, j] - 1].y);
+                    // GL.Vertex3(0, 1f, 1f);
                     GL.Vertex3(vertices[faces[i, j] - 1].x, vertices[faces[i, j] - 1].y, vertices[faces[i, j] - 1].z);
 
                      /*GL.Vertex3(((vertices[faces[i, j] - 1].x * Math.Cos(angulo)  + Math.Sin(angulo)* vertices[faces[i, j] - 1].z)*fScale)+fTrans,
@@ -130,7 +142,9 @@ namespace ConsoleApplication1
 
 
 
-            if (angulo > 360)
+
+
+                    if (angulo > 360)
             {
                 angulo = 0;
             }
@@ -154,7 +168,7 @@ namespace ConsoleApplication1
             if (e.KeyChar == 'r')
             {
                 angulo += 1;
-                Console.WriteLine(angulo);
+               // Console.WriteLine(angulo);
             }
             if (e.KeyChar == 's')
             {
@@ -172,7 +186,7 @@ namespace ConsoleApplication1
 
         void cargar()
         {
-            string archivo = File.ReadAllText("cubo.obj");
+            string archivo = File.ReadAllText("mono.obj");
             Char delimitador = ' ';
             int caras = 0;
             int verticies = 0;
@@ -181,7 +195,8 @@ namespace ConsoleApplication1
             string[] subcadenenas = Regex.Split(archivo, "\n");
             vertex = new double[subcadenenas.Length, 3];
             faces = new int[subcadenenas.Length, 100];
-            VerText = new double[subcadenenas.Length, 1];
+            facesText = new int[subcadenenas.Length, 100];
+            VerText = new double[subcadenenas.Length, 2];
             // int v=0;
             string[] vertexString = new string[0];
             for (int i = 0; i < subcadenenas.Length; i++)
@@ -199,6 +214,12 @@ namespace ConsoleApplication1
                         }
                         if (subcadenenas[i][j + 1] == 't')
                         {
+
+                            for (int k = 1; k <= 2; k++)
+                            {
+                                //Console.WriteLine(subcadenitas[k]);
+                                VerText[texturas, k - 1] = Convert.ToDouble(subcadenitas[k]);
+                            }
                           texturas++;
                             break;
                         }
@@ -227,13 +248,15 @@ namespace ConsoleApplication1
 
                         string[] subsubcadenitas = Regex.Split(subcadenenas[i], "/|\\ ");
                         int x = 1;
+                        int f = 2;
                         for (int k = 1; k <= 4; k++)
                         {//1,3,5,7
-                            
-                            //Console.WriteLine(subsubcadenitas[x]);
+                            facesText[caras, k - 1] = Int32.Parse(subsubcadenitas[f]);
+                            //Console.WriteLine(subsubcadenitas[f]);
                             //if(subcadenitas[k][1]==)
                              faces[caras, k - 1] = Int32.Parse(subsubcadenitas[x]);
                             x += 3;
+                            f += 3;
 
                         }
                         caras++;
@@ -252,6 +275,8 @@ namespace ConsoleApplication1
             Console.WriteLine("el numero texturas son: " + texturas);
             vertices = new Punto[verticies];
             caritas = new int[caras];
+            texturitas = new int[texturas];
+            Texturas= new Punto[texturas];
         }
 
 

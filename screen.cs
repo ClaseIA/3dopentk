@@ -37,6 +37,12 @@ namespace ConsoleApplication1
         double fScale;
         double fTrans;
 
+
+        bool rotar;
+        bool mover;
+        bool escalar;
+        double x, y, z;
+
         public screen(int ancho, int alto): base (ancho,alto)
         {
             GL.Enable(EnableCap.Texture2D);
@@ -44,6 +50,11 @@ namespace ConsoleApplication1
 
           protected override void OnLoad(EventArgs e)
           {
+            rotar = false;
+            mover = false;
+            escalar = false;
+
+
             cargar();
             fScale = 1;
             fTrans = 0;
@@ -68,6 +79,9 @@ namespace ConsoleApplication1
                 Texturas[i] = new Punto(); Texturas[i].valores(VerText[i, 0], VerText[i, 1],0);
             }
 
+
+           
+      
             //Console.WriteLine(faces[0, 1]);
 
 
@@ -109,42 +123,69 @@ namespace ConsoleApplication1
 
             GL.End();
 
-            GL.Rotate(angulo, 0, 1, 0);
+            // GL.Rotate(angulo, 0, 1, 0);
 
             // Console.WriteLine("ddddd: " + caritas.Length);
-           
-            for (int i = 0; i <caritas.Length; i++)
+
+
+            for (int i = 0; i < caritas.Length; i++)
             {
                 GL.BindTexture(TextureTarget.Texture2D, Texture2.ID);
                 GL.Begin(PrimitiveType.Quads);
-               
+
                 for (int j = 0; j < 4; j++)
                 {
-                   // if(j<2)
-                   GL.TexCoord2(Texturas[facesText[i, j]-1 ].x, Texturas[facesText[i, j]-1 ].y);
-                 // Console.WriteLine(Texturas[facesText[i, j] - 1].x );
-                  //  Console.WriteLine(Texturas[facesText[i, j] - 1].y);
+                    // if(j<2)
+                    GL.TexCoord2(Texturas[facesText[i, j] - 1].x, Texturas[facesText[i, j] - 1].y);
+                    // Console.WriteLine(Texturas[facesText[i, j] - 1].x );
+                    //  Console.WriteLine(Texturas[facesText[i, j] - 1].y);
+                 
                     // GL.Vertex3(0, 1f, 1f);
-                    GL.Vertex3(vertices[faces[i, j] - 1].x, vertices[faces[i, j] - 1].y, vertices[faces[i, j] - 1].z);
+                    x = vertices[faces[i, j] - 1].x;
+                    y = vertices[faces[i, j] - 1].y;
+                    z = vertices[faces[i, j] - 1].z;
+                    GL.Vertex3(x, y, z);
+                    if (rotar)
+                    {
 
-                     /*GL.Vertex3(((vertices[faces[i, j] - 1].x * Math.Cos(angulo)  + Math.Sin(angulo)* vertices[faces[i, j] - 1].z)*fScale)+fTrans,
-                     vertices[faces[i, j] - 1].y*fScale,
-                    ( vertices[faces[i, j] - 1].x * Math.Sinh(angulo)+  vertices[faces[i, j] - 1].z * Math.Cos(angulo))*fScale);*/
+                     x=   vertices[faces[i, j] - 1].x * Math.Cos(angulo) + Math.Sin(angulo) * vertices[faces[i, j] - 1].z;
+                     y= vertices[faces[i, j] - 1].y;
+                     z= vertices[faces[i, j] - 1].x * -Math.Sin(angulo) + vertices[faces[i, j] - 1].z * Math.Cos(angulo);
+
+                        vertices[faces[i, j] - 1].x = x;
+                        vertices[faces[i, j] - 1].y = y;
+                        vertices[faces[i, j] - 1].z = z;
+
+               
+
+                    }
+
+                    if (mover)
+                    {
+                        x = vertices[faces[i, j] - 1].x+ fTrans;
+                        vertices[faces[i, j] - 1].x = x;
+                    }
+
+                
+
 
                    
 
                 }
                 GL.End();
+                
 
             }
 
-           
+
+            rotar = false;
+            mover = false;
 
 
 
 
 
-                    if (angulo > 360)
+            if (angulo > 360)
             {
                 angulo = 0;
             }
@@ -159,17 +200,21 @@ namespace ConsoleApplication1
               base.OnKeyPress(e);
               if (e.KeyChar == 'a')
               {
+                mover = true;
                 fTrans -= 0.1;
             }
               if (e.KeyChar == 'd')
               {
+                mover = true;
                 fTrans += 0.1;
               }
             if (e.KeyChar == 'r')
             {
-                angulo += 1;
-               // Console.WriteLine(angulo);
-            }
+                angulo += 0.5;
+                rotar = true;
+
+
+             }
             if (e.KeyChar == 's')
             {
                fScale += 0.01;

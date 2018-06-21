@@ -12,7 +12,7 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            screen screen = new screen(600, 500);
+            screen screen = new screen(920, 820);
             screen.Title = "Renderin";
            
 

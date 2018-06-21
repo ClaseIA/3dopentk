@@ -270,9 +270,7 @@ namespace ConsoleApplication1
 
             }
          
-            Console.WriteLine("el numero de vertices son: " + verticies);
-            Console.WriteLine("el numero de caras son: " + caras);
-            Console.WriteLine("el numero texturas son: " + texturas);
+           
             vertices = new Punto[verticies];
             caritas = new int[caras];
             texturitas = new int[texturas];

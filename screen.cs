@@ -47,13 +47,13 @@ namespace ConsoleApplication1
             cargar();
             fScale = 1;
             fTrans = 0;
-              base.OnLoad(e);
-              radio = 0.2f;
-              GL.LoadIdentity();
-              GL.MatrixMode(MatrixMode.Projection);
+            base.OnLoad(e);
+            radio = 0.2f;
+            GL.LoadIdentity();
+            GL.MatrixMode(MatrixMode.Projection);
             GL.Ortho(0, 2, 0, 2, -1, 1);
-            Texture = PathTexture.LoadTexture("panda.png");
-            Texture2 = PathTexture.LoadTexture("mono.png");
+           Texture = PathTexture.LoadTexture("panda.png");
+            Texture2 = PathTexture.LoadTexture("cubincolorin.png");
             Matrix4 matriz = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1, 50.0f);
             GL.LoadMatrix(ref matriz);
             GL.Enable(EnableCap.DepthTest);
@@ -88,7 +88,7 @@ namespace ConsoleApplication1
             GL.Scale(0.5, 0.5, 0.5);
           
 
-            GL.BindTexture(TextureTarget.Texture2D, Texture.ID);
+           GL.BindTexture(TextureTarget.Texture2D, Texture.ID);
             GL.Begin(PrimitiveType.Quads);
 
            // GL.Color3(1.0, 0.0, 0.0);
@@ -115,24 +115,18 @@ namespace ConsoleApplication1
            
             for (int i = 0; i <caritas.Length; i++)
             {
-                GL.BindTexture(TextureTarget.Texture2D, Texture2.ID);
-                GL.Begin(PrimitiveType.Quads);
+             GL.BindTexture(TextureTarget.Texture2D, Texture2.ID);
+                GL.Begin(PrimitiveType.Polygon);
                
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 3; j++)
                 {
-                   // if(j<2)
+                   
                    GL.TexCoord2(Texturas[facesText[i, j]-1 ].x, Texturas[facesText[i, j]-1 ].y);
-                 // Console.WriteLine(Texturas[facesText[i, j] - 1].x );
-                  //  Console.WriteLine(Texturas[facesText[i, j] - 1].y);
-                    // GL.Vertex3(0, 1f, 1f);
-                    GL.Vertex3(vertices[faces[i, j] - 1].x, vertices[faces[i, j] - 1].y, vertices[faces[i, j] - 1].z);
+                  // GL.Vertex3(vertices[faces[i, j] - 1].x, vertices[faces[i, j] - 1].y, vertices[faces[i, j] - 1].z);
 
-                     /*GL.Vertex3(((vertices[faces[i, j] - 1].x * Math.Cos(angulo)  + Math.Sin(angulo)* vertices[faces[i, j] - 1].z)*fScale)+fTrans,
+                   /*  GL.Vertex3(((vertices[faces[i, j] - 1].x * Math.Cos(angulo)  + Math.Sin(angulo)* vertices[faces[i, j] - 1].z)*fScale)+fTrans,
                      vertices[faces[i, j] - 1].y*fScale,
                     ( vertices[faces[i, j] - 1].x * Math.Sinh(angulo)+  vertices[faces[i, j] - 1].z * Math.Cos(angulo))*fScale);*/
-
-                   
-
                 }
                 GL.End();
 
@@ -186,7 +180,7 @@ namespace ConsoleApplication1
 
         void cargar()
         {
-            string archivo = File.ReadAllText("mono.obj");
+            string archivo = File.ReadAllText("carrito.obj");
             Char delimitador = ' ';
             int caras = 0;
             int verticies = 0;
@@ -249,7 +243,7 @@ namespace ConsoleApplication1
                         string[] subsubcadenitas = Regex.Split(subcadenenas[i], "/|\\ ");
                         int x = 1;
                         int f = 2;
-                        for (int k = 1; k <= 4; k++)
+                        for (int k = 1; k <= 3; k++)
                         {//1,3,5,7
                             facesText[caras, k - 1] = Int32.Parse(subsubcadenitas[f]);
                             //Console.WriteLine(subsubcadenitas[f]);
@@ -272,7 +266,7 @@ namespace ConsoleApplication1
          
             Console.WriteLine("el numero de vertices son: " + verticies);
             Console.WriteLine("el numero de caras son: " + caras);
-            Console.WriteLine("el numero texturas son: " + texturas);
+            Console.WriteLine("el numero Vertices de texturas son: " + texturas);
             vertices = new Punto[verticies];
             caritas = new int[caras];
             texturitas = new int[texturas];

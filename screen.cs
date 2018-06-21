@@ -48,7 +48,7 @@ namespace ConsoleApplication1
 
             auto.crear("carrito.obj");
            // mono.crear("mono.obj");
-            Texture = PathTexture.LoadTexture("panda.png");
+            Texture = PathTexture.LoadTexture("fondo.jpg");
             Texture2 = PathTexture.LoadTexture("carrito.png");
            
             factorScale = 1;
@@ -72,7 +72,7 @@ namespace ConsoleApplication1
             base.OnRenderFrame(e);
             GL.LoadIdentity();
             GL.Scale(0.5, 0.5, 0.5);
-            fondo(Texture);
+            //fondo(Texture);
 
 
             //GL.Rotate(angulor, 0, 1, 0);
@@ -80,8 +80,11 @@ namespace ConsoleApplication1
             auto.dibujar(Texture2,angulo,factorScale,factorTrans);
             // mono.dibujar(Texture2, 0, fScale,0);
             r = false;
-           
 
+           GL.Rotate(angulor, 0, 0,- 1);
+
+           // GL.Translate( 0*angulo, 0, 0);
+            fondo(Texture);
 
             if (angulo > 360)
             {
@@ -129,7 +132,8 @@ namespace ConsoleApplication1
           protected override void OnMouseMove(OpenTK.Input.MouseMoveEventArgs e)
           {
               base.OnMouseMove(e);
-             angulor = 1 * e.Mouse.X;
+             angulo = 0.05 * e.Mouse.X;
+            angulor = 0.001 * e.Mouse.X;
             // angulo = 0.001 * e.Mouse.Y;
 
         }
@@ -143,18 +147,18 @@ namespace ConsoleApplication1
 
 
             GL.TexCoord2(0, 1);
-            GL.Vertex3(-2, -2, 1.5f);
+            GL.Vertex3(-3, -3, 1.5f);
 
 
             GL.TexCoord2(1, 1);
-            GL.Vertex3(2f, -2, 1.5f);
+            GL.Vertex3(3f, -3, 1.5f);
 
 
             GL.TexCoord2(1, 0);
-            GL.Vertex3(2f, 2f, 1.5f);
+            GL.Vertex3(3f, 3f, 1.5f);
 
             GL.TexCoord2(0, 0);
-            GL.Vertex3(-2, 2f, 1.5f);
+            GL.Vertex3(-3, 3f, 1.5f);
 
             GL.End();
         }

@@ -144,9 +144,11 @@ namespace ConsoleApplication1
 
                      
 
-                     GL.Vertex3(((vertices[faces[i, j] - 1].x * Math.Cos(angulo) + Math.Sin(angulo) * vertices[faces[i, j] - 1].z) * fScale) ,
+                     GL.Vertex3( (fTrans + (vertices[faces[i, j] - 1].x * Math.Cos(angulo) + Math.Sin(angulo) * vertices[faces[i, j] - 1].z) * fScale) ,
                      vertices[faces[i, j] - 1].y * fScale,
                     (vertices[faces[i, j] - 1].x * -Math.Sin(angulo) + vertices[faces[i, j] - 1].z * Math.Cos(angulo)) * fScale);
+
+
                 }
                 GL.End();
 

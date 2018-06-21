@@ -29,6 +29,7 @@ namespace ConsoleApplication1
         double angulor;
         double factorScale;
         double factorTrans;
+        bool r;
 
         public screen(int ancho, int alto): base (ancho,alto)
         {
@@ -38,7 +39,7 @@ namespace ConsoleApplication1
           protected override void OnLoad(EventArgs e)
           {
             base.OnLoad(e);
-
+            r = true;
       
             Matrix4 matriz = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 100, Width / (float)Height, 1, 5.0f);
             GL.LoadMatrix(ref matriz);
@@ -76,9 +77,9 @@ namespace ConsoleApplication1
 
             //GL.Rotate(angulor, 0, 1, 0);
 
-            auto.dibujar(Texture2,angulo,factorScale,factorScale);
-           // mono.dibujar(Texture2, 0, fScale,0);
-
+            auto.dibujar(Texture2,angulo,factorScale,factorTrans);
+            // mono.dibujar(Texture2, 0, fScale,0);
+            r = false;
            
 
 
@@ -97,7 +98,7 @@ namespace ConsoleApplication1
               base.OnKeyPress(e);
               if (e.KeyChar == 'a')
               {
-                factorTrans -= 0.1;
+                factorTrans -=0.1 ;
             }
               if (e.KeyChar == 'd')
               {
@@ -105,12 +106,23 @@ namespace ConsoleApplication1
               }
             if (e.KeyChar == 'r')
             {
+                r = true;
                 angulo += 1;
-                Console.WriteLine(angulo);
+               
             }
-            if (e.KeyChar == 's')
+            if (e.KeyChar == 't')
+            {
+                r = false;
+                angulo += 1;
+                
+            }
+            if (e.KeyChar == '1')
             {
                factorScale += 0.1;
+            }
+            if (e.KeyChar == '2')
+            {
+                factorScale -= 0.1;
             }
         }
 

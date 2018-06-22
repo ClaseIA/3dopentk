@@ -14,7 +14,8 @@ namespace ConsoleApplication1
     {
         Texture2D Texture;
         Texture2D Texture2;
-        
+        Texture2D Texture3;
+
         Punto[] punto = new Punto[10000];
        
      
@@ -47,10 +48,11 @@ namespace ConsoleApplication1
 
 
             auto.crear("carrito.obj");
-           // mono.crear("mono.obj");
+            mono.crear("mono.obj");
             Texture = PathTexture.LoadTexture("fondo.jpg");
             Texture2 = PathTexture.LoadTexture("carrito.png");
-           
+            Texture3 = PathTexture.LoadTexture("mono.png");
+
             factorScale = 1;
             factorTrans = 0;
 
@@ -78,7 +80,7 @@ namespace ConsoleApplication1
             //GL.Rotate(angulor, 0, 1, 0);
 
             auto.dibujar(Texture2,angulo,factorScale,factorTrans);
-            // mono.dibujar(Texture2, 0, fScale,0);
+             mono.dibujar(Texture3, -45, -0.3,1.5);
             r = false;
 
            GL.Rotate(angulor, 0, 0,- 1);
@@ -133,7 +135,7 @@ namespace ConsoleApplication1
           {
               base.OnMouseMove(e);
              angulo = 0.05 * e.Mouse.X;
-            angulor = 0.001 * e.Mouse.X;
+             angulor = 0.001 * e.Mouse.X;
             // angulo = 0.001 * e.Mouse.Y;
 
         }
